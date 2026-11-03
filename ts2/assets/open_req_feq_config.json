@@ -1,0 +1,24 @@
+{
+  "authApiControl" : {
+    "successFreq" : 60000,
+    "successCount" : 1,
+    "errorFreq" : 60000,
+    "errorCount" : 10
+  },
+  "refreshApiControl" : {
+    "successFreq" : 120000,
+    "successCount" : 2,
+    "errorFreq" : 60000,
+    "errorCount" : 10
+  },
+  "profileApiControl" : {
+    "errorFreq" : 60000,
+    "errorCount" : 10
+  },
+  "silentAuthApiControl": {
+    "successFreq": 86400000,
+    "successCount": 1,
+    "errorFreq": 60000,
+    "errorCount": 5
+  }
+}

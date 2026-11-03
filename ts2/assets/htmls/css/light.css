@@ -1,0 +1,112 @@
+/* font-style */
+.light .font-primary{
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.light .font-secondary{
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.light .font-hint{
+    color: rgba(0,0,0,0.3);
+}
+
+.light .font-disable{
+    color: rgba(0,0,0,0.15);
+}
+
+.light .pinyin-off-bgcolor{
+    background: #E5E5E5;
+}
+
+.light .bg-color{
+    background: #FFFFFF;
+}
+
+.light .linear-bg-color{
+    background: linear-gradient(to bottom, transparent, #FFFFFF);
+}
+
+.light .linear-mask{
+    background: linear-gradient(to top, transparent, #FFFFFF);
+}
+
+.light .chars-bg-color{
+    background: #FAFAFA;
+}
+
+.light .underline-bg{
+    background: #FAFAFA;
+    border-radius: 30rem;
+    width: 1.32rem;
+    height: 1.32rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/***********************tab *******************/
+.light .tab-check-font-style{
+    color:rgba(0, 0, 0, 0.85);
+    font-weight: 500;
+}
+
+.light .tab-underline-color{
+    background-color: rgba(0, 0, 0, 0.85);
+}
+/***********************tab *******************/
+
+
+.light .single-bg-color{
+    background:#FAFAFA;
+}
+
+/* 粗细滑动条 */
+.light .weight-fill-color{
+    background-color: #4D4D4D;
+}
+
+.light .weight-line-color{
+    background-color:  rgba(0,0,0,0.05);
+}
+
+.light .weight-border-show {
+    border: 0.27rem solid rgba(0,0,0,0.06) !important;
+    border-radius: 0.46rem !important;
+}
+
+/*  弹出框 */
+.light .dialog-bg-color{
+    background: #FAFAFA;
+}
+
+.light .add-text-div .input-div input{
+    border-bottom: 0.04rem solid black;
+    color: rgba(0, 0, 0, 0.85);
+    font-weight: normal;
+}
+
+.light .add-text-div .input-div input::-webkit-input-placeholder{
+    font-size: 0.48rem;
+    color: rgba(0, 0, 0, 0.3);
+    font-weight: normal;
+}
+
+.light .x-split-line{
+    height: 0.1rem;
+    width: 8.16rem;
+    transform: scaleY(0.1);
+    margin-top: 0.2rem;
+    background-color: rgba(0, 0, 0, 0.11);
+}
+
+.light .button-disable{
+    background: #E5E5E5;
+    color: rgba(0, 0, 0, 0.15);
+    animation: none !important;
+}
+
+.light .button-disable:active{
+    animation: none !important;
+    animation-fill-mode:none !important;
+}

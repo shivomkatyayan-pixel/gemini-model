@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>汉仪	 DIY 字体</title>
+    <link rel="stylesheet" href="css/util.css" media="screen"/>
+    <link rel="stylesheet" href="css/main.css" media="screen"/>
+    <link rel="stylesheet" href="css/single.css" media="screen"/>
+    <link rel="stylesheet" href="css/light.css" media="screen"/>
+    <link rel="stylesheet" href="css/dark.css" media="screen"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script src="js/angular/angular.min.js"></script>
+    <script src="js/scope.js"></script>
+    <script src="js/interation.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/tool.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/canvas.js"></script>
+    <script src="js/accessory.js"></script>
+    <script src="js/animation.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/single.js"></script>
+    <script>
+    </script>
+  </head>
+  <body onload="loadData()" style="visibility: hidden;">
+    <div id="my-app" class="app-container single-bg-color" ng-app="myApp">
+      <div class="app-dialog" ng-controller="dialogCtrl" ng-show="opened">
+        <!-- 退出当前diy文字dialog -->
+        <div class="dialog" style="align-items: center;" ng-show="gobackDialog" ng-cloak>
+          <div class="confirm dialog-bg-color">
+            <div class="title font-primary font-medium sys-font-medium">该DIY效果未保存</div>
+            <div class="func">
+              <div id="text-button-stillBack" class="sys-font-medium text-button material-design" style="color:#EC3E50">仍然退出</div>
+              <div class="split-line" style="width: 0.04rem;height:0.66rem;background: rgba(0, 0, 0, 0.12);"></div>
+              <div id="text-button-closeBackDialog" class="sys-font-medium text-button material-design" style="color:#EC3E50">暂不退出</div>
+            </div>
+          </div>
+        </div>
+        <!-- 增加单字dialog -->
+        <div class="dialog" id="input_text_dialog_el" ng-show="inputTextDialog" ng-click="clickInputMask()" ng-cloak>
+          <div id="add_text_el" class="add-text-div dialog-bg-color" ng-click="inputFocus($event)">
+            <div class="title font-medium font-primary sys-font-medium">{{showText.addChar}}</div>
+            <div class="input-div">
+              <input id="add-char-input" class="dialog-bg-color font-medium" 
+                type="text" ng-model="inputChar" placeholder="输入字体" ng-keyup="dealInputText($event)"></input>
+              <div class="close" ng-show="inputChar.length > 0 && deletecharshow" ng-click="clearInputText();"></div>
+            </div>
+            <div class="input-button-div">
+              <div id="text-button-closeInputCharDialog" class="sys-font-medium text-button material-design" style="color:#EC3E50">取消</div>
+              <!-- <input type="button" class="sys-font-medium" style="color: #EC3E50;" ng-click="closeInputCharDialog()" value="取消">-->
+              <div class="split-line" style="width: 0.04rem;height:0.66rem;background: rgba(0, 0, 0, 0.12);"></div>
+              <div ng-show="inputChar.length === 0 || inputInit" class="sys-font-medium text-button"
+                  ng-style="{'color': colorAddOpcity( '#EC3E50', 0.3 )}">{{showText.finishAddChar}}</div>
+              <div id="text-button-addChar" ng-show="inputChar.length > 0 && !inputInit" class="sys-font-medium text-button material-design"
+                  style="color:#EC3E50">{{showText.finishAddChar}}</div>
+            </div>
+          </div>
+        </div>
+        <!-- 判断文字是否被修改过提示dialog -->
+        <div class="dialog" style="align-items: center;" ng-show="haveMadeDialog" ng-cloak>
+          <div class="confirm dialog-bg-color">
+            <div class="title font-primary font-medium sys-font-medium">已定制过该字</div>
+            <div class="func">
+              <div id="text-button-closeHaveMadeDialog" class="sys-font-medium text-button material-design" style="color:#EC3E50">知道了</div>
+              <div class="split-line" style="width: 0.04rem;height:0.66rem;background: rgba(0, 0, 0, 0.12);"></div>
+              <div id="text-button-checkChar" class="sys-font-medium text-button material-design" style="color:#EC3E50">查看</div>
+            </div>
+          </div>
+        </div>
+        <!-- 是否全局应用效果dialog -->
+        <div id="globle_apply_dialog_el" class="dialog" style="align-items: center;" ng-show="globleApplyDialog" ng-cloak>
+          <div class="globle-apply dialog-bg-color">
+            <div class="globle-apply-title font-medium font-primary sys-font-medium">即将应用全局效果，是否保留已定制的单字效果？</div>
+            <div class="choose">
+              <div id="text-button-globleApply(false)" class="sys-font-medium text-button material-design">保留单字效果</div>
+              <div id="text-button-globleApply(true)" class="sys-font-medium text-button material-design">使用全局效果</div>
+              <div id="text-button-closeGlobleApplyDialog" class="sys-font-medium text-button material-design">取消</div>
+            </div>
+          </div>
+        </div>
+        <!-- 删除当前diy文字dialog -->
+        <div class="dialog" style="align-items: flex-end;" ng-click="closeDeleteDialog()" ng-show="deleteDialog" ng-cloak>
+          <div class="delete-char dialog-bg-color" ng-click="stopPro($event)">
+            <div class="text font-medium sys-font material-design" 
+              id="text-button-doDelete"
+              style="width:100%;height: 1.56rem;color: #EC3E50;"
+              >{{showText.deleteText}}</div>
+            <div class="x-split-line"></div>
+            <div class="text font-primary font-medium sys-font material-design" 
+              id="text-button-closeDeleteDialog"
+              style="width:100%;height: 2.1rem;">
+              取消
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="main-page"  class="app-container" ng-controller="mainCtrl">
+        <div class="preview-background single-bg-color" >
+          <img ng-style="{'width':previewBgStyle.w + 'rem','height': previewBgStyle.h + 'rem',
+            'margin': previewBgStyle.top + 'rem' + ' 0 0 ' + previewBgStyle.left + 'rem' }" 
+            ng-src="{{previewBg}}" ng-cloak imageonload="previewBgLoaded()">
+        </div>
+        <div class="app-main" ng-style="{'height': remH + 'rem'}">
+          <div class="nav" style="justify-content: space-between;">
+            <img ng-src="{{navBackImage}}" ng-click="goback()">
+            <!--<button onclick="changeFont()">更换字体</button>-->
+            <!--<button onclick="changeStyle()">更换色系</button>-->
+            <img ng-show="!isFirstDiy" class="delete-icon"
+              ng-src="{{navCancelImage}}" 
+              ng-click="openDeleteDialog()"
+            >
+          </div>
+          <div class="preview">
+            <div id="previewborder" class="preview-border">
+              <img id="preview-img" ng-src="{{mainPreviewImg}}" ng-cloak>
+            </div>
+          </div>
+          <div class="custom-made-content bg-color">
+            <div class="tab-box">
+              <div class="line tab-underline-color" id="tab_line"></div>
+              <div ng-click="checkTab($event,'1')" class="tab-item font-medium font-secondary" id="main-tab-1">全局样式</div>
+              <div ng-click="checkTab($event,'2')" class="tab-item font-medium font-secondary" id="main-tab-2">单字定制</div>
+            </div>
+            <div class="linear-mask"></div>
+            <div class="screen2" id="screen2">
+              <div class="tab-content-box" id="main-tab-box">
+                <div id="main-tab1" class="tab-content-item">
+                  <div id="whole-diy-content" class="whole-diy-content" ng-style="{'height':diyContentH+'rem'}">
+                    <div id="whole-content-scroll" class="main-page-scroll">
+                      <div class="pinyin" ng-show="pinyins.length > 0">
+                        <div class="title font-secondary font-x-small">拼音</div>
+                        <div class="content">
+                          <div class="font-primary font-medium" style="font-weight: normal;">字体拼音</div>
+                          <div class="switch2">
+                            <div class="switch-2" id="switch-2">
+                              <div class="switch-button" id="switch-button"></div>
+                            </div>
+                            <div onclick="aniChangePinyin()" class="button"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="fontweight" ng-show="null != weight">
+                        <div class="title font-secondary font-x-small">粗细</div>
+                        <div class="content" id="font-weight">
+                          <div class="weight-line weight-line-color" id="weight-line">
+                            <div class="weight-filling weight-fill-color" id="weight-filling"></div>
+                            <div class="weight-border" id="weight-border" style="z-index: 11;"></div>
+                            <div class="weight-button weight-fill-color" id="weight-button"></div>
+                          </div>
+                        </div>
+                      </div>
+          
+                      <div class="fontcolor" ng-show="colors.length > 0">
+                        <div class="title font-secondary font-x-small">颜色</div>
+                        <div class="content">
+                          <div class="imgsdiv" ng-style="colorStyle === x.id && 
+                                  {'box-shadow': 'inset 0px 0px 0px 0.06rem ' + bgColor} || 
+                                  {'box-shadow': 'inset 0px 0px 0px 0.06rem transparent'}" 
+                                  style="border-radius: 50%" data-ng-click="changeColor(x.id)" ng-repeat="x in colors">
+                              <img id="colorimg" class="colorimg" 
+                                ng-src="{{(NIGHT_MODE && (undefined !== x.filename_dark)) ? x.filename_dark : x.filename}}">
+                          </div>
+                        </div>
+                      </div>
+          
+                      <div class="fonttheme" ng-show="themes.length > 0">
+                        <div class="title font-secondary font-x-small">背景</div>
+                        <div class="content">
+                          <div class="imgsdiv" ng-style="themeStyle === x.id && 
+                                  {'box-shadow': 'inset 0px 0px 0px 0.06rem ' + bgColor} || 
+                                  {'box-shadow': 'inset 0px 0px 0px 0.06rem transparent'}" 
+                                  style="border-radius: 50%" data-ng-click="changeTheme(x.id)" ng-repeat="x in themes">
+                            <img id="listimg" class="listimg" 
+                              ng-src="{{(NIGHT_MODE && (undefined !== x.filename_dark)) ? x.filename_dark : x.filename}}">
+                          </div>
+                        </div>
+                      </div>
+          
+                      <div class="fontbg" ng-show="backgrounds.length > 0">
+                        <div class="title font-secondary font-x-small">背景</div>
+                        <div class="content">
+                          <div class="imgsdiv" ng-style="backgroundId === x.id && 
+                                    {'box-shadow': 'inset 0px 0px 0px 0.06rem ' + bgColor} || 
+                                    {'box-shadow': 'inset 0px 0px 0px 0.06rem transparent'}" 
+                                    data-ng-click="changeBackground(x.id)" ng-repeat="x in backgrounds">
+                            <img id="listimg" class="listimg" 
+                              ng-src="{{ (NIGHT_MODE && (undefined !== x.filename_dark)) ? x.filename_dark : x.filename}}">
+                          </div>
+                        </div>
+                      </div>
+          
+                      <div class="fontunderline" ng-show="underlines.length > 0">
+                        <div class="title font-secondary font-x-small">下划线</div>
+                        <div class="content">
+                          <div class="imgsdiv" ng-style="underlineId === x.id && 
+                                              {'box-shadow': 'inset 0px 0px 0px 0.06rem ' + bgColor} || 
+                                              {'box-shadow': 'inset 0px 0px 0px 0.06rem transparent'}" 
+                                              data-ng-click="changeUnderline(x.id)" ng-repeat="x in underlines">
+                            <div class="underline-bg underline-bg-color">
+                              <img class="listimg"  
+                              ng-src="{{ (NIGHT_MODE && (undefined !== x.filename_dark)) ? x.filename_dark : x.filename}}">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="kong"></div>
+                    </div>
+                  </div>
+                </div>
+                <div id="main-tab2" class="tab-content-item">
+                  <div id="single-texts-content" class="single-texts-content"  ng-style="{'height':diyContentH+'rem'}">
+                    <div id="single-content-scroll" class="main-page-scroll">
+                      <div class="content">
+                        <div class="texts" ng-click="openInputCharDialog()">
+                          <div class="sys-font-medium font-x-small font-secondary">添加字体</div>
+                          <div class="text" ng-style="{'background': colorAddOpcity(bgColor,0.1) };"><!-- 加号 -->
+                            <div style="margin-left: -0.24rem;width: 0.54rem; height: 0.06rem;" ng-style="{'background':bgColor}"></div>
+                            <div style="margin-left: -0.3rem;width: 0.06rem; height: 0.54rem;" ng-style="{'background':bgColor}"></div>
+                          </div>
+                        </div>
+                        <div class="texts" data-ng-click="openSinglePage(x.unicode)" ng-repeat="x in chars">
+                          <div class="font-x-small font-secondary"></div>
+                          <div id="charpreview" class="text chars-bg-color">
+                            <img style="max-width: 1.08rem;max-height: 1.08rem;" ng-src="{{x.img}}">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="kong"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      
+          <div class="submit">
+            <div class="submit linear-bg-color" ng-show="!bottomButton.isVIP">
+              <button style="width:6.6rem;color: #FFFFFF;" ng-style="{'background':bgColor}" ng-click="saveAndTryFont()">{{bottomButton.btn1Text}}</button>
+            </div>
+            <div class="submit linear-bg-color" ng-show="bottomButton.isVIP">
+              <button style="width:4.56rem;" 
+                ng-style="{'background':bgTintColor,'color':bgColor}" 
+                ng-click="saveAndTryFont()">{{bottomButton.btn1Text}}</button>
+              <button style="width:4.56rem;margin-left:0.24rem;color: #FFFFFF;" 
+                ng-style="{'background':bgColor}" ng-click="buyProduct()">{{bottomButton.btn2Text}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="single-page" class="app-single" ng-controller="singleCtrl">
+        <div class="app-main single-bg-color" ng-style="{'height':remH + 'rem'}">
+          <div class="nav" style="justify-content:space-between;">
+            <img class="back-icon" 
+              ng-src="{{ navBackImage }}" 
+              ng-click="goback()">
+            <img ng-show="!charIsFirstDiy" class="delete-icon" 
+              ng-src="{{ navCancelImage }}" 
+              ng-click="openDeleteDialog()">
+          </div>
+          <div class="single-char" ng-cloak>
+            <div class="font-medium font-primary sys-font-medium">{{curchar.char}}</div>
+            <img style="width: 0.72rem;height:0.72rem;" 
+              ng-src="{{ navEditImage }}" 
+              ng-click="openInputCharDialog()"/>
+          </div>
+          <div id="preview" class="single-preview">
+              <canvas ng-show="NIGHT_MODE" ng-style="{'width': mcanvas.bg_w + 'px','height':mcanvas.bg_h + 'px',
+                'left' : mcanvas.bg_left + 'px','top' : mcanvas.bg_top + 'px', 
+                'background' : 'rgba(64,64,64,1)'}" class="bgcanvas">
+              </canvas>
+              <canvas ng-show="!NIGHT_MODE" ng-style="{'width': mcanvas.bg_w + 'px','height':mcanvas.bg_h + 'px', 
+                'left' : mcanvas.bg_left + 'px','top' : mcanvas.bg_top + 'px', 
+                'background' : colorAddOpcity( bgColor, 0.1 )}" class="bgcanvas">
+              </canvas>
+              <canvas id="main_canvas" width="{{mcanvas.previewW}}" height="{{mcanvas.previewH}}" 
+                ng-style="{'width': mcanvas.w + 'px','height':mcanvas.h + 'px',
+                'left' : mcanvas.left + 'px','top' : mcanvas._top + 'px', }" class="maincanvas">
+              </canvas>
+              <canvas id="comp_canvas" ng-style="{'left' : mcanvas.left + 'px','top' : mcanvas._top + 'px'}" class="compcanvas">
+              </canvas>
+          </div>
+          <div class="toucharea" id="toucharea"></div>
+          <div id="custom-made" class="custom-made-content bg-color">
+            <div class="tab-box" id="single-tab">
+              <div class="line tab-underline-color" id="single-tab-line"></div>
+              <div ng-click="checkTab($event,'2')" class="tab-item font-medium font-secondary" id="single-tab-1">样式</div>
+              <div ng-click="checkTab($event,'3')" class="tab-item font-medium font-secondary" id="single-tab-2">背景</div>
+              <div ng-click="checkTab($event,'4')" class="tab-item font-medium font-secondary" id="single-tab-3">装饰</div>
+            </div>
+            <div class="linear-mask"></div>
+            <div class="screen2" id="screen2">
+              <div class="tab-content-box" id="single-tab-box">
+                <div id="single-tab1" class="tab-content-item">
+                  <div id="style-content" class="style-content" ng-style="{'height':(diyContentH - 0.12) +'rem'}">
+                    <div id="style-content-scroll">
+                      <div class="fontcolor" ng-show="colors.length > 0">
+                        <div class="title font-secondary font-x-small">颜色</div>
+                        <div class="content">
+                          <div class="imgsdiv" ng-style="curchar.colorStyle === x.id && 
+                                    {'box-shadow': 'inset 0px 0px 0px 0.06rem ' + bgColor} || 
+                                    {'box-shadow': 'inset 0px 0px 0px 0.06rem transparent'}" 
+                                     data-ng-click="changeCurCharColor(x.id)" ng-repeat="x in colors">
+                            <img class="colorimg" 
+                              ng-src="{{(NIGHT_MODE && (undefined !== x.filename_dark)) ? x.filename_dark : x.filename}}">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="fontunderline" ng-show="underlines.length > 0">
+                        <div class="title font-secondary font-x-small">下划线</div>
+                        <div class="content">
+                          <div class="imgsdiv" ng-style="curchar.underlineId === x.id && 
+                                              {'box-shadow': 'inset 0px 0px 0px 0.06rem ' + bgColor} || 
+                                              {'box-shadow': 'inset 0px 0px 0px 0.06rem transparent'}" 
+                                              data-ng-click="changeCurCharUnderline(x.id)" ng-repeat="x in underlines">
+                            <div class="underline-bg">
+                              <img class="listimg" 
+                                ng-src="{{ (NIGHT_MODE && (undefined !== x.filename_dark)) ? x.filename_dark : x.filename}}">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="fontsubstitute" ng-show="substitutes.length > 0">
+                        <div class="title font-secondary font-x-small">字形</div>
+                        <div class="content">
+                          <div class="imgsdiv" ng-style="curchar.substituteId === x.id && 
+                                              {'box-shadow': 'inset 0px 0px 0px 0.06rem ' + bgColor} || 
+                                              {'box-shadow': 'inset 0px 0px 0px 0.06rem transparent'}" 
+                                              data-ng-click="changeCurCharSubstitues(x.id)" ng-repeat="x in substitutes">
+                            <img class="listimg" 
+                              ng-src="{{ (NIGHT_MODE && (undefined !== x.filename_dark)) ? x.filename_dark : x.filename}}">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="kong"></div>
+                    </div>
+                  </div>
+                </div>
+                <div id="single-tab2" class="tab-content-item">
+                  <div id="bg-content" class="bg-content" ng-style="{'height':diyContentH+'rem'}">
+                    <div id="bg-content-scroll">
+                      <div class="fontbg">
+                        <div class="content">
+                          <div class="imgsdiv" ng-style="curchar.backgroundId === x.id && 
+                                              {'box-shadow': 'inset 0px 0px 0px 0.06rem ' + bgColor} || 
+                                              {'box-shadow': 'inset 0px 0px 0px 0.06rem transparent'}" 
+                                              data-ng-click="changeCurCharBackground(x.id)" ng-repeat="x in backgrounds">
+                            <img class="listimg" 
+                              ng-src="{{ (NIGHT_MODE && (undefined !== x.filename_dark)) ? x.filename_dark : x.filename}}">
+                          </div>
+                          <div class="imgsdiv" ng-style="curchar.themeStyle === x.id && 
+                                              {'box-shadow': 'inset 0px 0px 0px 0.06rem ' + bgColor} || 
+                                              {'box-shadow': 'inset 0px 0px 0px 0.06rem transparent'}" 
+                                              data-ng-click="changeCurCharTheme(x.id)" ng-repeat="x in themes">
+                            <img class="listimg" 
+                              ng-src="{{(NIGHT_MODE && (undefined !== x.filename_dark)) ? x.filename_dark : x.filename}}">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="kong"></div>
+                    </div>
+                  </div>
+                </div>
+                <div id="single-tab3" class="tab-content-item">
+                  <div id="acc-content" class="acc-content" ng-style="{'height':diyContentH+'rem'}">
+                    <div id="acc-content-scroll">
+                      <div class="fontacc">
+                        <div class="content" id="fontacc-content">
+                          <div class="accdiv" ng-style="( curacclist.getLength() > 0 && 
+                                              curacclist.getAccessory(curaccIndex).glyphIndex === x.glyphIndex )&& 
+                                              {'background': colorAddOpcity( bgColor, 0.1 )} || 
+                                              {'background': 'transparent'}" 
+                                              data-ng-click="addComp(x.glyphIndex, null)" ng-repeat="x in pendants">
+                            <img class="accimg" ng-src="{{x.img}}">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="kong"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="submit">
+            <div class="submit linear-bg-color">
+              <button ng-show="change_single" style="width:6.6rem;color: #FFFFFF;" ng-style="{'background': bgColor}" ng-click="save()">完成</button>
+              <button ng-show="!change_single" class="button-disable" style="width:6.6rem">完成</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="loading" id="loading" style="display: block;"></div>
+  </body>
+</html>

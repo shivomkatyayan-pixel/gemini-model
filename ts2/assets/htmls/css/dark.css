@@ -1,0 +1,116 @@
+/* font-style */
+.dark .font-primary{
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.dark .font-secondary{
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.dark .font-hint{
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.dark .font-disable{
+    color: rgba(255, 255, 255, 0.15);
+}
+
+.dark .pinyin-off-bgcolor{
+    background: #757575;
+}
+
+.dark .bg-color{
+    background: #404040;
+}
+
+.dark .linear-bg-color{
+    background: linear-gradient(to bottom, transparent, #404040);
+}
+
+.dark .linear-mask{
+    background: linear-gradient(to top, transparent, #404040);
+}
+
+.dark .chars-bg-color{
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.dark .underline-bg{
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30rem;
+    width: 1.32rem;
+    height: 1.32rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/***********************tab *******************/
+.dark .tab-check-font-style{
+    color:rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+}
+
+.dark .tab-underline-color{
+    background-color: rgba(255, 255, 255, 0.85);
+}
+/***********************tab *******************/
+
+.dark .single-bg-color{
+    background:#000000;
+}
+
+/* 粗细滑动条 */
+.dark .weight-fill-color{
+    background-color: #999999;
+}
+
+.dark .weight-line-color{
+    background-color:  rgba(255,255,255,0.1);
+}
+
+.dark .weight-border-show {
+    border: 0.27rem solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 0.46rem !important;
+}
+
+
+/*  弹出框 */
+.dark .dialog-bg-color{
+    background: #383838;
+}
+
+.dark .add-text-div .input-div input{
+    border-bottom: 0.04rem solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: normal;
+}
+
+.dark .add-text-div .input-div input::-webkit-input-placeholder{
+    font-size: 0.48rem;
+    font-weight: normal;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.dark .x-split-line{
+    height: 0.1rem;
+    width: 8.16rem;
+    transform: scaleY(0.1);
+    margin-top: 0.2rem;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .split-line{
+    filter: invert(1);
+}
+
+.dark .button-disable{
+    background: #5C5C5C;
+    color: rgba(255, 255, 255, 0.2);
+    animation: none !important;
+}
+
+.dark .button-disable:active{
+    animation: none !important;
+    animation-fill-mode:none !important;
+}

@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Lockscreen version="1" vibrate="false" frameRate="60" screenWidth="1080" displayDesktop="true" mediateResType="1">
+
+    <VariableBinders>
+        <ContentProviderBinder uri="content://secure_settings_data?name=theme_store_variengine_entrance_button_config">
+            <!--主题商店入口按钮文字-->
+            <Variable name="entranceText" column="entranceText" type="string" />
+            <!--主题商店入口按钮跳转链接-->
+            <Variable name="entranceUri" column="entranceUri" type="string" />
+        </ContentProviderBinder>
+
+		<ContentProviderBinder uri="content://secure_settings_data?name=theme_store_variengine_wallpaper_entrance_config">
+            <!--入口按钮是否可用-->
+            <Variable name="entranceEnable" column="entranceEnable" type="number" />
+        </ContentProviderBinder>
+
+        <ContentProviderBinder uri="content://secure_settings_data?name=enable_land_clock_screen_clock_switch">
+            <!-- clock方向：1=横，0=竖 -->
+            <Variable name="enable_land_clock_screen_clock_switch" column="valueColumn" type="number"/>
+        </ContentProviderBinder>
+
+        <ContentProviderBinder uri="content://system_settings_data?name=key_is_show_lunar_calendar">
+            <!-- 是否显示农历: true/false -->
+            <Variable name="key_is_show_lunar_calendar" column="valueColumn" type="string"/>
+        </ContentProviderBinder>
+
+    </VariableBinders>
+
+    <Var name="entrance_text" expression="ifelse(strIsEmpty(@entranceText),'更多精彩',@entranceText)" type="string" />
+    <Var name="entrance_uri" expression="ifelse(strIsEmpty(@entranceUri),'oaps://theme/home?oapTargetUri=oaps%3A%2F%2Ftheme%2Flockentrance',@entranceUri)+'&amp;enter_id=100052'" type="string" />
+
+    <Var name="is_clock_light" expression="1"/>
+
+    <Var name="buttonSize" expression="144" type="number" />
+    <Var name="button_top" expression="#screen_height-144-#buttonSize"/>
+    <Var name="button_bottom" expression="#screen_height"/>
+
+    <!--十天干 -->
+    <VarArray type="string">
+        <Vars>
+            <Var name="cn_o" index="#year_lunar%10" />
+        </Vars>
+        <Items>
+            <Item value="庚" />
+            <Item value="辛" />
+            <Item value="壬" />
+            <Item value="癸" />
+            <Item value="甲" />
+            <Item value="乙" />
+            <Item value="丙" />
+            <Item value="丁" />
+            <Item value="戊" />
+            <Item value="己" />
+        </Items>
+    </VarArray>
+
+    <!--十二地支 对应十二生肖 -->
+    <VarArray type="string">
+        <Vars>
+            <Var name="cn_t" index="#year_lunar%12" />
+        </Vars>
+        <Items>
+            <Item value="申猴年" />
+            <Item value="酉鸡年" />
+            <Item value="戌狗年" />
+            <Item value="亥猪年" />
+            <Item value="子鼠年" />
+            <Item value="丑牛年" />
+            <Item value="寅虎年" />
+            <Item value="卯兔年" />
+            <Item value="辰龙年" />
+            <Item value="巳蛇年" />
+            <Item value="午马年" />
+            <Item value="未羊年" />
+        </Items>
+    </VarArray>
+
+    <!-- 农历月份 -->
+    <VarArray type="string">
+        <Vars>
+            <Var name="nl_month" index="#month_lunar-1" />
+        </Vars>
+        <Items>
+            <Item value="正月" />
+            <Item value="二月" />
+            <Item value="三月" />
+            <Item value="四月" />
+            <Item value="五月" />
+            <Item value="六月" />
+            <Item value="七月" />
+            <Item value="八月" />
+            <Item value="九月" />
+            <Item value="十月" />
+            <Item value="冬月" />
+            <Item value="腊月" />
+        </Items>
+    </VarArray>
+
+    <!-- 农历日期 -->
+    <VarArray type="string">
+        <Vars>
+            <Var name="nl_date" index="#date_lunar-1" />
+        </Vars>
+        <Items>
+            <Item value="初一" />
+            <Item value="初二" />
+            <Item value="初三" />
+            <Item value="初四" />
+            <Item value="初五" />
+            <Item value="初六" />
+            <Item value="初七" />
+            <Item value="初八" />
+            <Item value="初九" />
+            <Item value="初十" />
+            <Item value="十一" />
+            <Item value="十二" />
+            <Item value="十三" />
+            <Item value="十四" />
+            <Item value="十五" />
+            <Item value="十六" />
+            <Item value="十七" />
+            <Item value="十八" />
+            <Item value="十九" />
+            <Item value="二十" />
+            <Item value="廿一" />
+            <Item value="廿二" />
+            <Item value="廿三" />
+            <Item value="廿四" />
+            <Item value="廿五" />
+            <Item value="廿六" />
+            <Item value="廿七" />
+            <Item value="廿八" />
+            <Item value="廿九" />
+            <Item value="三十" />
+        </Items>
+    </VarArray>
+
+    <VarArray type="string">
+        <Vars>
+            <Var name="wee_sun" index="#day_of_week-1" />
+        </Vars>
+        <Items>
+            <Item value="周日" />
+            <Item value="周一" />
+            <Item value="周二" />
+            <Item value="周三" />
+            <Item value="周四" />
+            <Item value="周五" />
+            <Item value="周六" />
+        </Items>
+    </VarArray>
+
+    <!-- 是否支持多时钟样式：ColorOS 12~14支持 -->
+    <Var name="isColorOS12" expression="ifelse(strIsEmpty(@color_version),0,strMatches(@color_version,'12.*'),1,0)" type="number" />
+    <Var name="isColorOS13" expression="ifelse(strIsEmpty(@color_version),0,strMatches(@color_version,'13.*'),1,0)" type="number" />
+    <Var name="isColorOS14" expression="ifelse(strIsEmpty(@color_version),0,strMatches(@color_version,'14.*'),1,0)" type="number" />
+    <Var name="use_multi_clock_style" expression="ifelse(strIsEmpty(@enable_land_clock_screen_clock_switch),0,#isColorOS12+#isColorOS13+#isColorOS14,1,0)" type="number" />
+
+    <!-- 时钟样式定义 -->
+    <Var name="multi_clock_text_size" expression="216" type="number" />
+    <Var name="multi_clock_text_size_port" expression="ifelse(#isColorOS12,162,216)" type="number" />
+    <Var name="multi_date_margin_clock_port" expression="ifelse(#isColorOS12,60,24)" type="number" />
+    <Var name="multi_date_text_size" expression="42" type="number" />
+    <Var name="multi_date_text_alpha" expression="ifelse(#isColorOS12,0.7*255,0.85*255)" />
+    <Var name="multi_clock_text_weight" expression="400" type="number" />
+    <Var name="multi_date_text_weight" expression="ifelse(#isColorOS12,400,500)" type="number" />
+    <Var name="multi_minute_text_weight_port" expression="ifelse(#isColorOS13,300,400)" type="number" />
+
+    <Var name="multi_clock_area_y_land" expression="336" type="number" />
+    <Var name="multi_time_dot.text_width" expression="55" type="number" />
+    <Var name="multi_time_hour.text_width" expression="250" type="number" />
+    <Var name="multi_time_minute.text_width" expression="250" type="number" />
+    <Var name="multi_time_width" expression="#multi_time_dot.text_width+#multi_time_hour.text_width+#multi_time_minute.text_width" type="number" />
+    <Var name="multi_hour_left" expression="(#screen_width-#multi_time_width)/2"/>
+    <Var name="multi_dot_left" expression="#multi_hour_left+#multi_time_hour.text_width"/>
+    <Var name="multi_minute_left" expression="#multi_dot_left+#multi_time_dot.text_width"/>
+
+    <Var name="multi_clock_area_x_port" expression="ifelse(#isColorOS12,117,93)" type="number" />
+    <Var name="multi_clock_area_y_port" expression="ifelse(#isColorOS12,246,240)" type="number" />
+    <Var name="multi_time_hour_port.text_width" expression="#multi_time_hour.text_width" type="number" />
+    <Var name="multi_time_minute_port.text_width" expression="#multi_time_minute.text_width" type="number" />
+
+    <Var name="multi_area_checker" expression="ifelse(eq(#use_multi_clock_style,0),'180,280,900,630',eqs('1',#enable_land_clock_screen_clock_switch),'180,280,900,760','100,240,600,900')" type="string" />
+
+    <!-- 可显示的农历日期 -->
+    <Var name="multi_date_separator" expression="ifelse(#isColorOS14,'',',')" type="string" />
+    <Var name="lunar_format_text" expression="ifelse(#use_multi_clock_style*eqs(@key_is_show_lunar_calendar,'true'),@cn_o+@cn_t+@nl_month+@nl_date,'')" type="string" />
+
+    <Wallpaper src="bg.png" w="#screen_width" h="#screen_height" scaleType="centerCrop">
+        <!--查询按钮背景是否是亮色区域-->
+        <AreaChecker rect="'0,'+#button_top+',1080,'+#button_bottom">
+            <Variable name="is_light" column="is_light" type="number" />
+        </AreaChecker>
+        <!--查询时钟是否是亮色区域-->
+        <AreaChecker rect="@multi_area_checker">
+            <Variable name="is_clock_light" column="is_light" type="number" />
+        </AreaChecker>
+    </Wallpaper>
+
+    <Var name="clock_color" expression="ifelse(#is_clock_light,'#FFFFFF','#000000')" type="string"/>
+    <Var name="clock_alpha" expression="ifelse(#is_clock_light,0.9*255,0.54*255)"/>
+
+    <Var name="time_dot.text_width" expression="40" type="number" />
+    <Var name="time_hour.text_width" expression="180" type="number" />
+    <Var name="time_minute.text_width" expression="180" type="number" />
+    <Var name="time_width" expression="#time_dot.text_width+#time_hour.text_width+#time_minute.text_width" type="number" />
+    <Var name="hour_left" expression="(#screen_width-#time_width)/2"/>
+    <Var name="dot_left" expression="#hour_left+#time_hour.text_width"/>
+    <Var name="minute_left" expression="#dot_left+#time_dot.text_width"/>
+
+    <!-- ColorOS 15及以上系统时，使用原有样式(仿OS15固定横向)，不要动 -->
+    <Group visibility="eq(#use_multi_clock_style,0)">
+        <DateTime x="#screen_width/2" y="318" color="@clock_color" alpha="#clock_alpha" size="60" align="center" alignV="center" format="M月d日 EEE"
+            shadowRadius="6" shadowDx="0" shadowDy="0" shadowColor="#1A000000" bold="1"/>
+
+        <Text name="time_hour" x="#hour_left" y="504" h="240" textExp="ifelse(eqs(@ishour12,'true'),#hour12,#hour24)" size="240" alignV="center"
+            textalign="center" color="@clock_color" alpha="#clock_alpha" shadow="6|0|0|#1A000000" bold="1"/>
+
+        <Text name="time_dot" x="#dot_left" y="484" h="240" text=":" size="240" alignV="center"
+            textalign="center" color="@clock_color" alpha="#clock_alpha" shadow="6|0|0|#1A000000" bold="1"/>
+
+        <Text name="time_minute" x="#minute_left" y="504" h="240" textExp="#minute" size="240" alignV="center"
+            textalign="center" color="@clock_color" alpha="#clock_alpha" shadow="6|0|0|#1A000000" bold="1"/>
+    </Group>
+
+    <!-- ColorOS 12~14 横版时钟样式 -->
+    <Group visibility="#use_multi_clock_style*eqs('1',@enable_land_clock_screen_clock_switch)"
+        y="#multi_clock_area_y_land">
+        <Text name="multi_time_hour" alignV="center" weight="#multi_clock_text_weight" color="@clock_color"
+            size="#multi_clock_text_size" textExp="ifelse(eqs(@ishour12,'true'),#hour12,#hour24)"
+            textalign="center" x="#multi_hour_left" y="#multi_clock_text_size/2" />
+
+        <Text name="multi_time_dot" alignV="center" weight="#multi_clock_text_weight" color="@clock_color"
+            size="#multi_clock_text_size" text=":" textalign="center" x="#multi_dot_left"
+            y="#multi_clock_text_size/2-16" />
+
+        <Text name="multi_time_minute" alignV="center" weight="#multi_clock_text_weight" color="@clock_color"
+            size="#multi_clock_text_size" textExp="#minute" textalign="center" x="#multi_minute_left"
+            y="#multi_clock_text_size/2" />
+
+        <Text name="date_time_full" align="center" alignV="center" alpha="#multi_date_text_alpha"
+            weight="#multi_date_text_weight" color="@clock_color" format="%d月%d日%s  %s  %s"
+            paras="#month+1,#date,@multi_date_separator,@wee_sun,@lunar_format_text"
+            size="#multi_date_text_size" x="#screen_width/2"
+            y="#multi_clock_text_size+#multi_date_text_size/2+36" />
+    </Group>
+
+    <!-- ColorOS 12~14 竖版时钟样式 -->
+    <Group visibility="#use_multi_clock_style*eqs('0',@enable_land_clock_screen_clock_switch)"
+        x="#multi_clock_area_x_port" y="#multi_clock_area_y_port">
+        <Text name="multi_time_hour_port" alignV="center" color="@clock_color" size="#multi_clock_text_size_port"
+            textExp="ifelse(eqs(@ishour12,'true'),#hour12,#hour24)" textalign="left"
+            weight="#multi_clock_text_weight" y="#multi_clock_text_size_port/2" />
+
+        <Text name="multi_time_minute_port" alignV="center" color="@clock_color" size="#multi_clock_text_size_port"
+            textExp="#minute" textalign="left" weight="#multi_minute_text_weight_port"
+            y="#multi_clock_text_size_port*3/2" />
+
+        <Text name="date_time_normal" alignV="center"
+            alpha="#multi_date_text_alpha" color="@clock_color" format="%d月%d日%s  %s"
+            paras="#month+1,#date,@multi_date_separator,@wee_sun" size="#multi_date_text_size"
+            textalign="left" weight="#multi_date_text_weight"
+            y="#multi_clock_text_size_port*2+#multi_date_text_size/2+#multi_date_margin_clock_port" />
+
+        <Group alignV="center" visibility="ifelse(strIsEmpty(@lunar_format_text),0,1)"
+            y="#multi_clock_text_size_port*2+#multi_date_text_size*3/2+#multi_date_margin_clock_port+18">
+            <Text name="date_time_lunar" alignV="center" alpha="#multi_date_text_alpha"
+                color="@clock_color" size="#multi_date_text_size" text="@lunar_format_text"
+                textalign="left" weight="#multi_date_text_weight" />
+        </Group>
+    </Group>
+
+<!--    主题商店入口按钮-->
+<!--    <ThemeEntranceButton resType="1" buttonType="0" x="72" y="#screen_height-72-#buttonSize" w="#buttonSize" h="#buttonSize"-->
+<!--        iconPadding="36" src="themestore.png" clickAction="showCircle" freeUnlock="1" text="@entrance_text" visibility="ifelse(isnull(#entranceEnable),1,#entranceEnable)"-->
+<!--        bgColorNormal="ifelse(#is_light,'#4DCCCCCC','#4D333333')"-->
+<!--        bgColorPressed="ifelse(#is_light,'#4D333333','#4DCCCCCC')"-->
+<!--        iconTintColorNormal="#FFFFFF"-->
+<!--        iconTintColorPressed="#FFFFFF"-->
+<!--        circleColor="ifelse(#is_light,'#FFFFFF','#000000')">-->
+<!--        <IntentCommand uri="@entrance_uri" flags="FLAG_ACTIVITY_MULTIPLE_TASK"/>-->
+<!--    </ThemeEntranceButton>-->
+
+<!--    &lt;!&ndash;相机入口按钮&ndash;&gt;-->
+<!--    <ThemeEntranceButton resType="1" buttonType="1" x="#screen_width-#buttonSize-72" y="#screen_height-#buttonSize-72" w="#buttonSize" h="#buttonSize"-->
+<!--        iconPadding="36" src="camera.png" clickAction="showCircle" freeUnlock="1"-->
+<!--        bgColorNormal="ifelse(#is_light,'#4DCCCCCC','#4D333333')"-->
+<!--        bgColorPressed="ifelse(#is_light,'#4D333333','#4DCCCCCC')"-->
+<!--        iconTintColorNormal="#FFFFFF"-->
+<!--        iconTintColorPressed="#FFFFFF"-->
+<!--        circleColor="ifelse(#is_light,'#FFFFFF','#000000')">-->
+<!--        <IntentCommand action="android.media.action.STILL_IMAGE_CAMERA_SECURE" category="android.intent.category.DEFAULT"/>-->
+<!--    </ThemeEntranceButton>-->
+
+    <!--上滑解锁-->
+    <Unlocker name="unlocker" bounceAcceleration="3000" bounceInitSpeed="2000">
+        <StartPoint h="#screen_height" w="1080" x="0" y="0" />
+        <EndPoint h="200" w="1080" x="0" y="-420">
+            <Path h="#screen_height" w="1080" x="0" y="0">
+                <Position x="0" y="0" />
+                <Position x="0" y="-250" />
+            </Path>
+        </EndPoint>
+    </Unlocker>
+
+</Lockscreen>
